@@ -1,0 +1,16 @@
+:{$PORT} {
+    root * /srv
+
+    # Proxy all API calls to the backend via Railway's private network.
+    # Set BACKEND_INTERNAL_URL in Railway frontend variables, e.g.:
+    #   http://genna-backend.railway.internal:PORT
+    handle /api/* {
+        reverse_proxy {$BACKEND_INTERNAL_URL}
+    }
+
+    # SPA fallback: serve index.html for all non-API routes
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+}

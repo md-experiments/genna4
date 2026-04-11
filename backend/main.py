@@ -5,9 +5,12 @@ from routers import datasets, annotations, inference
 app = FastAPI(title="Genna API", description="Backend for Genna Annotation System")
 
 # Enable CORS for the frontend
+# In production the frontend Caddy proxy forwards requests internally, so the
+# browser never makes a cross-origin call and CORS is not needed.  This list
+# covers local development only.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all for dev, restrict in prod
+    allow_origins=["http://localhost:5173", "http://localhost:4173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
