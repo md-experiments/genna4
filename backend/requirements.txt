@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pydantic
+firebase-admin
+httpx
+openai
+anthropic
+python-dotenv
