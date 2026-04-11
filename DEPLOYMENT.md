@@ -11,9 +11,6 @@ Genna is structured as a monorepo containing a `frontend/` (Vue 3/Vite) and `bac
    - Set the **Builder** to `Nixpacks`
    - Set the **Start Command** to `uvicorn main:app --host 0.0.0.0 --port $PORT`
 4. Go to **Variables** and add the variables defined in `backend/.env.example`:
-   - `OPENAI_API_KEY`
-   - `OPENROUTER_API_KEY`
-   - `ANTHROPIC_API_KEY`
    - `GOOGLE_APPLICATION_CREDENTIALS` (Paste the raw JSON content of your Firebase Service Account here. Railway will securely inject it).
 5. Generate a Public Domain for the backend service (e.g., `genna-backend.up.railway.app`).
 
