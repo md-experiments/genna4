@@ -6,3 +6,4 @@ httpx
 openai
 anthropic
 python-dotenv
+python-multipart
