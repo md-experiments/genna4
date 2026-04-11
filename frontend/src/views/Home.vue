@@ -79,7 +79,8 @@ import { useAuthStore } from '../stores/auth';
 const authStore = useAuthStore();
 const router = useRouter();
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Empty string → same-origin proxy (production); undefined → local dev default
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
 
 const datasets = ref([]);
 const loadingDatasets = ref(true);

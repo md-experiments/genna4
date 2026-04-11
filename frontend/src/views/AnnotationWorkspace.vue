@@ -206,7 +206,8 @@ const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 const modelConfigsStore = useModelConfigsStore();
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Empty string → same-origin proxy (production); undefined → local dev default
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
 const datasetId = route.params.datasetId;
 
 // ── State ───────────────────────────────────────────────────────────────────
