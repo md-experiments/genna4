@@ -1,6 +1,6 @@
 from fastapi import Header, HTTPException
 import firebase_admin
-from firebase_admin import auth, credentials
+from firebase_admin import auth, credentials, firestore
 import os
 import json
 
@@ -18,6 +18,8 @@ except ValueError:
             firebase_admin.initialize_app()
     except Exception as e:
         print("Warning: Firebase not fully initialized:", e)
+
+db = firestore.client()
 
 def verify_token(authorization: str = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):

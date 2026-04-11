@@ -3,11 +3,12 @@ from openai import AsyncOpenAI
 import anthropic
 
 async def generate_response(
-    provider: str, 
-    model: str, 
-    prompt: str, 
-    system: str = None, 
+    provider: str,
+    model: str,
+    prompt: str,
+    system: str = None,
     temp: float = 0.7,
+    max_tokens: int = 1024,
     openrouter_key: str = None,
     openai_key: str = None,
     anthropic_key: str = None
@@ -60,7 +61,7 @@ async def generate_response(
         
         kwargs = {
             "model": model,
-            "max_tokens": 1024,
+            "max_tokens": max_tokens,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": temp
         }

@@ -3,10 +3,12 @@ import { useAuthStore } from '../stores/auth';
 
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
+import AnnotationWorkspace from '../views/AnnotationWorkspace.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { requiresAuth: true } },
-  { path: '/login', component: Login }
+  { path: '/login', component: Login },
+  { path: '/workspace/:datasetId', component: AnnotationWorkspace, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
