@@ -2,22 +2,28 @@ import os
 from openai import AsyncOpenAI
 import anthropic
 
-openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy"))
-anthropic_client = anthropic.AsyncAnthropic(api_key=os.getenv("ANTHROPIC_API_KEY", "dummy"))
-
-openrouter_client = AsyncOpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY", "dummy")
-)
-
-async def generate_response(provider: str, model: str, prompt: str, system: str = None, temp: float = 0.7):
+async def generate_response(
+    provider: str, 
+    model: str, 
+    prompt: str, 
+    system: str = None, 
+    temp: float = 0.7,
+    openrouter_key: str = None,
+    openai_key: str = None,
+    anthropic_key: str = None
+):
     if provider == "openai":
+        key = openai_key or os.getenv("OPENAI_API_KEY")
+        if not key:
+            raise ValueError("OpenAI API key missing")
+        client = AsyncOpenAI(api_key=key)
+        
         messages = []
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
         
-        resp = await openai_client.chat.completions.create(
+        resp = await client.chat.completions.create(
             model=model,
             messages=messages,
             temperature=temp,
@@ -25,12 +31,17 @@ async def generate_response(provider: str, model: str, prompt: str, system: str 
         return resp.choices[0].message.content
 
     elif provider == "openrouter":
+        key = openrouter_key or os.getenv("OPENROUTER_API_KEY")
+        if not key:
+            raise ValueError("OpenRouter API key missing")
+        client = AsyncOpenAI(base_url="https://openrouter.ai/api/v1", api_key=key)
+        
         messages = []
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
         
-        resp = await openrouter_client.chat.completions.create(
+        resp = await client.chat.completions.create(
             model=model,
             messages=messages,
             temperature=temp,
@@ -42,6 +53,11 @@ async def generate_response(provider: str, model: str, prompt: str, system: str 
         return resp.choices[0].message.content
 
     elif provider == "anthropic":
+        key = anthropic_key or os.getenv("ANTHROPIC_API_KEY")
+        if not key:
+            raise ValueError("Anthropic API key missing")
+        client = anthropic.AsyncAnthropic(api_key=key)
+        
         kwargs = {
             "model": model,
             "max_tokens": 1024,
@@ -51,7 +67,7 @@ async def generate_response(provider: str, model: str, prompt: str, system: str 
         if system:
             kwargs["system"] = system
             
-        resp = await anthropic_client.messages.create(**kwargs)
+        resp = await client.messages.create(**kwargs)
         return resp.content[0].text
         
     raise ValueError(f"Unknown provider: {provider}")
